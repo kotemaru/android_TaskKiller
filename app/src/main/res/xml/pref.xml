@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:defaultValue="CPU_AVERAGE"
+        android:entries="@array/sortConditionLabel"
+        android:entryValues="@array/sortCondition"
+        android:key="sortCondition"
+        android:title="Sort condition"/>
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="showSystemProcess"
+        android:selectable="true"
+        android:summaryOn="System process showing."
+        android:title="Show system process"/>
+
+    <PreferenceCategory android:title="Process monitor settings"/>
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="monitoring"
+        android:selectable="true"
+        android:summaryOn="Process monitored.\nMonitor will drain the battery.\nPlease use the long interval."
+        android:title="Activate process monitor"/>
+    <ListPreference
+        android:defaultValue="10"
+        android:entries="@array/intervalLabel"
+        android:entryValues="@array/interval"
+        android:key="monitorInterval"
+        android:title="Monitoring interval"/>
+    <ListPreference
+        android:defaultValue="20"
+        android:entries="@array/loggingCount"
+        android:entryValues="@array/loggingCount"
+        android:key="monitorLoggingCount"
+        android:title="Monitor logging count"/>
+
+</PreferenceScreen>

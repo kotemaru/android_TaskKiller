@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">Task killer</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_refresh">Refresh</string>
+
+
+    <string-array name="sortCondition">
+        <item>CPU_LATEST</item>
+        <item>CPU_AVERAGE</item>
+        <item>NAME</item>
+    </string-array>
+    <string-array name="sortConditionLabel">
+        <item>CPU(latest)</item>
+        <item>CPU(average)</item>
+        <item>Application name</item>
+    </string-array>
+    <string-array name="interval">
+        <item>1</item>
+        <item>5</item>
+        <item>10</item>
+        <item>30</item>
+        <item>60</item>
+    </string-array>
+    <string-array name="intervalLabel">
+        <item>1 min</item>
+        <item>5 min</item>
+        <item>10 min</item>
+        <item>30 min</item>
+        <item>60 min</item>
+    </string-array>
+    <string-array name="loggingCount">
+        <item>10</item>
+        <item>20</item>
+        <item>50</item>
+        <item>100</item>
+    </string-array>
+
+</resources>

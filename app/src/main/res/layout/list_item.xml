@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:descendantFocusability="blocksDescendants">
+
+    <org.kotemaru.android.taskkiller.widget.GraphView
+        android:id="@+id/graph"
+        android:layout_width="50dp"
+        android:layout_height="32dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/checkBox"
+/>
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@null"
+        android:src="@android:drawable/ic_delete"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="52dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginTop="4dp"
+        android:text="name"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="52dp"
+        android:layout_marginRight="48dp"
+        android:text="package"
+        android:textSize="12sp"/>
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"/>
+
+    <TextView
+        android:id="@+id/rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/checkBox"
+        android:text="100%"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="10sp"/>
+
+
+</RelativeLayout>
