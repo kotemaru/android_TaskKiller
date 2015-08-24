@@ -74,9 +74,9 @@ public class PrefActivity extends Activity {
             }
 
             int interval = Config.getMonitorInterval();
-            Log.d("DEBUG","interval="+interval+":"+mBackupMonitorInterval+":"+isProcessMonitoring);
+            Log.d("DEBUG", "interval=" + interval + ":" + mBackupMonitorInterval + ":" + isProcessMonitoring);
             if (isProcessMonitoring && mBackupMonitorInterval != interval) {
-                Log.d("DEBUG","restart monitor");
+                Log.d("DEBUG", "restart monitor");
                 mBackupMonitorInterval = interval;
                 MonitorReceiver.stopMonitor(getActivity());
                 mApplication.getProcessMonitor().resetCpuLog();
@@ -102,7 +102,7 @@ public class PrefActivity extends Activity {
                 String key = pref.getKey();
                 CharSequence val = sharedPrefs.getString(key, "");
                 if (pref instanceof ListPreference) {
-                    ListPreference listPref = (ListPreference)pref;
+                    ListPreference listPref = (ListPreference) pref;
                     val = listPref.getEntry();
                 }
                 pref.setSummary(val);

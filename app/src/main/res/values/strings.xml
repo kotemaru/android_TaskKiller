@@ -1,9 +1,14 @@
 <resources>
     <string name="app_name">Task killer</string>
+    <string name="app_name_setting">Task killer (settings)</string>
+    <string name="app_name_aboud">Task killer (about)</string>
+    <string name="app_name_help">Task killer (help)</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_refresh">Refresh</string>
+    <string name="action_about">about</string>
+    <string name="action_help">help</string>
 
 
     <string-array name="sortCondition">

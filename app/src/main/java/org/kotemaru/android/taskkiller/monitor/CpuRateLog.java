@@ -8,7 +8,7 @@ public class CpuRateLog {
     public float lastCpuRate = 0.0F;
     public float avgCpuRate = 0.0F;
     private long lastAccumulateCpuTime = -1;
-    public int availCount=0;
+    public int availCount = 0;
 
     public CpuRateLog(int size) {
         logSize = size;
@@ -18,8 +18,8 @@ public class CpuRateLog {
 
     public void shift() {
         System.arraycopy(log, 1, log, 0, logSize - 1);
-        log[logSize-1] = 0.0F;
-        if (availCount<logSize) availCount++;
+        log[logSize - 1] = 0.0F;
+        if (availCount < logSize) availCount++;
     }
 
     public float pushCpuTime(long accumulateProcessCpuTime, long systemTotalCpuTime) {

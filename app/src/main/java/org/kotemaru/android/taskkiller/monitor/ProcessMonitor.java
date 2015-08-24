@@ -5,13 +5,11 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
-import org.kotemaru.android.taskkiller.persistent.Config;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -25,7 +23,8 @@ public class ProcessMonitor {
     private PackageManager mPackageManager;
     private HashMap<String, PackageInfo> mPackageMap = new HashMap<String, PackageInfo>();
     private HashMap<String, ProcessInfo> mProcessMap = new HashMap<String, ProcessInfo>();
-    private byte[] mBuff = new byte[4096];
+    private byte[] mBytes = new byte[4096];
+    private ByteBuffer mBuffer = ByteBuffer.wrap(mBytes);
     private long lastTotalCpuTime = 0;
 
     public ProcessMonitor(Context context) {
@@ -60,7 +59,6 @@ public class ProcessMonitor {
     }
 
     public void refresh(Context context) {
-        long currentTime = System.currentTimeMillis();
         long totalCpuTime = getTotalCpuTime();
         long subTotalCpuTime = totalCpuTime - lastTotalCpuTime;
         lastTotalCpuTime = totalCpuTime;
@@ -89,7 +87,7 @@ public class ProcessMonitor {
             Map.Entry<String, ProcessInfo> ent = ite.next();
             ProcessInfo info = ent.getValue();
             if (!info.isAlive) {
-                Log.d(TAG, "isDead:" + info.getSubTitle());
+                //Log.d(TAG, "isDead:" + info.getSubTitle());
                 ite.remove();
             }
             info.isAlive = false;
@@ -135,60 +133,87 @@ public class ProcessMonitor {
     }
 
     private String getCommandLine(String pid) {
-        String name = readFile("/proc/" + pid + "/cmdline");
-        if (name == null || name.isEmpty()) {
-            return getProcessName(pid);
-        }
+        int len = readFile("/proc/" + pid + "/cmdline", mBuffer);
+        if (len <= 0) return getProcessName(pid);
+        String name = new String(mBytes, 0, len);
+        return name.trim();
+    }
+
+    private String getProcessName(String pid) {
+        int len = readFile("/proc/" + pid + "/stat", mBuffer);
+        if (len <= 0) return "()";
+        int off = skip(mBytes, 0, len);
+        int end = skip(mBytes, off, len);
+        String name = new String(mBytes, off, end);
         return name.trim();
     }
 
     private long getCpuTime(String pid) {
-        String stat = readFile("/proc/" + pid + "/stat");
-        if (stat == null) return 0L;
-        String[] data = stat.split("\\s+");
-        //Log.d(TAG,"getCpuTime:"+stat);
-        return Long.parseLong(data[13]) + Long.parseLong(data[14]);
-    }
-
-    private String getProcessName(String pid) {
-        String stat = readFile("/proc/" + pid + "/stat");
-        if (stat == null) return "()";
-        String[] data = stat.split("\\s+");
-        //Log.d(TAG,"c:"+stat);
-        return data[1];
+        int len = readFile("/proc/" + pid + "/stat", mBuffer);
+        if (len <= 0) return 0L;
+        int off = 0;
+        for (int i = 1; i < 13; i++) off = skip(mBytes, off, len);
+        long item13 = toLong(mBytes, off, len);
+        off = skip(mBytes, off, len);
+        long item14 = toLong(mBytes, off, len);
+        //Log.d(TAG, "getCpuTime:" + item13 + "," + item14 + "  :" + new String(mBytes, 0, len));
+        return item13 + item14;
     }
 
 
     private long getTotalCpuTime() {
-        String stat = readFile("/proc/stat");
-        //Log.d(TAG,"getTotalCpuTime:"+stat);
-        String[] data = stat.split("\\s+");
+        int len = readFile("/proc/stat", mBuffer);
+        if (len <= 0) return 0L;
+        int off = 0;
         long total = 0;
+        //Log.d(TAG, "getTotalCpuTime:" + new String(mBytes, 0, len));
+
         for (int i = 1; i < 11; i++) {
-            total += Long.parseLong(data[i]);
+            off = skip(mBytes, off, len);
+            long val = toLong(mBytes, off, len);
+            //Log.d(TAG, "getTotalCpuTime:" + i + "=" + val);
+            total += val;
         }
         return total;
     }
 
-    private String readFile(String fileName) {
+    private int readFile(String fileName, ByteBuffer buffer) {
         try {
-            InputStream in = new FileInputStream(fileName);
+            FileInputStream in = new FileInputStream(fileName);
+            FileChannel channel = in.getChannel();
             try {
-                int n;
-                int offset = 0;
-                int remain = mBuff.length;
-                while ((n = in.read(mBuff, offset, remain)) != -1 && remain > 0) {
-                    offset += n;
-                    remain -= n;
-                }
-                return new String(mBuff, 0, offset, "utf8");
+                buffer.clear();
+                int n = channel.read(buffer);
+                return n;
             } finally {
-                in.close();
+                channel.close();
             }
         } catch (IOException e) {
             Log.w(TAG, e.toString() + ": " + fileName);
-            return null;
+            return -1;
         }
+    }
+
+    private final int skip(byte[] buff, int off, int maxLen) {
+        for (; off < maxLen; off++) {
+            //Log.d(TAG,"skip:1:"+off+":"+buff[off]);
+            if (buff[off] == ' ') break;
+        }
+        for (; off < maxLen; off++) {
+            //Log.d(TAG,"skip:2:"+off+":"+buff[off]);
+            if (buff[off] != ' ') break;
+        }
+        return off;
+    }
+
+    private final long toLong(byte[] buff, int off, int maxLen) {
+        long val = 0;
+        for (int i = 0; off < maxLen + i; i++) {
+            char ch = (char) buff[off + i];
+            if ('0' > ch || ch > '9') return val;
+            val = val * 10 + (ch - '0');
+        }
+        return val;
     }
 
 }

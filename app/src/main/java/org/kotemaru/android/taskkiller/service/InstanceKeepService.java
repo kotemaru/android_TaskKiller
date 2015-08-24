@@ -25,11 +25,11 @@ public class InstanceKeepService extends IntentService {
 
     public void startForeground() {
         Notification.Builder builder = new Notification.Builder(getApplicationContext());
-        builder.setSmallIcon(R.drawable.icon_black);
+        builder.setSmallIcon(R.drawable.icon_notify);
         builder.setContentTitle(getString(R.string.app_name));
         builder.setWhen(System.currentTimeMillis());
         builder.setContentText(Config.isProcessMonitoring()
-                ? "Process monitored (interval="+Config.getMonitorInterval()+"min)"
+                ? "Process monitored (interval=" + Config.getMonitorInterval() + "min)"
                 : "");
 
         Intent intent = new Intent(this, MainActivity.class);

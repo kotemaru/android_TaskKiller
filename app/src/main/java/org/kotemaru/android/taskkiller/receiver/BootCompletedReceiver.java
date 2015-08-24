@@ -7,9 +7,6 @@ import android.util.Log;
 
 import org.kotemaru.android.taskkiller.service.InstanceKeepService;
 
-/**
- * Created by inou on 2015/08/20.
- */
 public class BootCompletedReceiver extends BroadcastReceiver {
     private static final String TAG = "BootCompletedReceiver";
 

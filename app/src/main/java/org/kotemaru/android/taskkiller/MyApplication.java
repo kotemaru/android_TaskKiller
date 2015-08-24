@@ -39,7 +39,7 @@ public class MyApplication extends Application {
         return mProcessMonitor;
     }
 
-    public synchronized  void setMainActivity(MainActivity mainActivity) {
+    public synchronized void setMainActivity(MainActivity mainActivity) {
         mMainActivity = mainActivity;
     }
 

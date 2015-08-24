@@ -63,8 +63,8 @@ public class Database extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public Map<String,Integer> getMap() {
-        Map<String,Integer> map = new HashMap<String,Integer>();
+    public Map<String, Integer> getMap() {
+        Map<String, Integer> map = new HashMap<String, Integer>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(PACKAGE_TABLE, null, null, null, null, null, null);
         while (cursor.moveToNext()) {

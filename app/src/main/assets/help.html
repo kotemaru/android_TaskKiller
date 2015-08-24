@@ -1,0 +1,60 @@
+<html>
+<head>
+    <style>
+        ul {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+        }
+    </style>
+</head>
+<body>
+<h2>Task killer for screen off</h2>
+<hr>
+
+This app will kill the application that has been specified at the time of the screen off.<br>
+It is intended to prevent battery drain during sleep.
+
+<h3>Specify a kill target app</h3>
+
+Please put the check from the list of apps.
+<p><img src="cap-1.png" width="50%"/></p>
+However, depending on the apps...
+<ul>
+    <li>That can not be stopped</li>
+    <li>Those that automatically restart</li>
+    <li>Those that affect the system when you stop</li>
+</ul>
+Please note that there is such.
+
+<h3>Process monitor</h3>
+
+It has the ability to monitor the execution state of the process in order to discover the app
+running unnecessarily.
+<p>
+    Please enable the "Activate process monitor" item from the settings screen.
+
+<p><img src="cap-2.png" width="50%"/></p>
+<font color="red" size="1">
+    Note: Process monitoring is itself will drain the battery.
+    Please be disabled if there is no need.</font>
+
+<p></p>
+If enable the process monitoring, graph of CPU usage is displayed in the apps list.
+(Graph 10% or more is hidden.)
+<p></p>
+All processes, including the system is displayed when you showing the "PROCESS" tab.
+
+<p><img src="cap-3.png" width="50%"/></p>
+
+<h4>How to reading CPU graph</h4>
+
+Normally it shows the high utilization system_server process.<br>
+That's because it is available from other apps in a common feature of the OS.<br>
+<br>
+Resident app that is running at regular intervals may have indirectly battery draining.
+Even if the CPU utilization is low.
+<br><br>
+During sleep the CPU is slower.
+Therefore it looks like CPU utilization has risen, but it is normal.
+</body>
+</html>

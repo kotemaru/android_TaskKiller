@@ -16,7 +16,7 @@
     <PreferenceCategory android:title="Process monitor settings"/>
 
     <SwitchPreference
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:key="monitoring"
         android:selectable="true"
         android:summaryOn="Process monitored.\nMonitor will drain the battery.\nPlease use the long interval."

@@ -13,7 +13,7 @@ import java.util.List;
 
 
 public class GraphView extends View {
-    private static final String TAG =  GraphView.class.getSimpleName();
+    private static final String TAG = GraphView.class.getSimpleName();
     private float[] mData;
     private Paint mPaint = new Paint();
     private Path mPath = new Path();
@@ -30,9 +30,9 @@ public class GraphView extends View {
         super(context, attrs, defStyleAttr);
     }
 
-    public GraphView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
+    //public GraphView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    //    super(context, attrs, defStyleAttr, defStyleRes);
+    //}
 
     public void setData(float[] data) {
         mData = data;

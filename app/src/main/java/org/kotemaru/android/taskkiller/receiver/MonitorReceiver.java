@@ -55,6 +55,7 @@ public class MonitorReceiver extends BroadcastReceiver {
         }
         updateNotification(context);
     }
+
     public static void startMonitor(Context context) {
         ctrlMonitor(context, true);
     }

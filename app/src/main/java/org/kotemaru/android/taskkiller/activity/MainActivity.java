@@ -150,27 +150,28 @@ public class MainActivity extends Activity {
         } else {
             mApplication.getProcessMonitor().getProcessInfoList(mItemInfoList, Config.isShowSystemProcess());
         }
-        if (Config.getSortCondition() == Config.SortCondition.CPU_LATEST) {
-            Collections.sort(mItemInfoList, new Comparator<ItemInfo>() {
-                @Override
-                public int compare(ItemInfo lhs, ItemInfo rhs) {
-                    return (int) ((rhs.getCpuRateLog().lastCpuRate - lhs.getCpuRateLog().lastCpuRate) * 1000000);
-                }
-            });
-        } else if (Config.getSortCondition() == Config.SortCondition.CPU_AVERAGE) {
-            Collections.sort(mItemInfoList, new Comparator<ItemInfo>() {
-                @Override
-                public int compare(ItemInfo lhs, ItemInfo rhs) {
-                    return (int) ((rhs.getCpuRateLog().avgCpuRate - lhs.getCpuRateLog().avgCpuRate) * 1000000);
-                }
-            });
-        } else {
+
+        if (!Config.isProcessMonitoring() || Config.getSortCondition() == Config.SortCondition.NAME) {
             Collections.sort(mItemInfoList, new Comparator<ItemInfo>() {
                 @Override
                 public int compare(ItemInfo lhs, ItemInfo rhs) {
                     int res = lhs.getTitle().compareTo(rhs.getTitle());
                     if (res != 0) return res;
                     return lhs.getSubTitle().compareTo(rhs.getSubTitle());
+                }
+            });
+        } else if (Config.getSortCondition() == Config.SortCondition.CPU_LATEST) {
+            Collections.sort(mItemInfoList, new Comparator<ItemInfo>() {
+                @Override
+                public int compare(ItemInfo lhs, ItemInfo rhs) {
+                    return (int) ((rhs.getCpuRateLog().lastCpuRate - lhs.getCpuRateLog().lastCpuRate) * 1000000);
+                }
+            });
+        } else {
+            Collections.sort(mItemInfoList, new Comparator<ItemInfo>() {
+                @Override
+                public int compare(ItemInfo lhs, ItemInfo rhs) {
+                    return (int) ((rhs.getCpuRateLog().avgCpuRate - lhs.getCpuRateLog().avgCpuRate) * 1000000);
                 }
             });
         }
@@ -256,7 +257,6 @@ public class MainActivity extends Activity {
     }
 
 
-
     private Drawable getIcon(String packageName) {
         Drawable icon = mIconMap.get(packageName);
         if (icon == null) {
@@ -287,9 +287,9 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        /*
         MenuItem item;
-
         item = menu.add(0, R.string.action_refresh, 0, R.string.action_refresh);
         item.setIcon(R.drawable.refresh);
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
@@ -297,21 +297,35 @@ public class MainActivity extends Activity {
         item = menu.add(0, R.string.action_settings, 0, R.string.action_settings);
         item.setIcon(R.drawable.settings);
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
+*/
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.string.action_settings) {
-            Intent intent = new Intent(this, PrefActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (id == R.string.action_refresh) {
-            refresh();
-            return true;
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                startActivity(new Intent(this, PrefActivity.class));
+                return true;
+            case R.id.action_refresh:
+                refresh();
+                return true;
+            case R.id.action_help:
+                intent = new Intent(this, WebViewActivity.class);
+                intent.setData(Uri.parse("file:///android_asset/help.html"));
+                startActivity(intent);
+                return true;
+            case R.id.action_about:
+                intent = new Intent(this, WebViewActivity.class);
+                intent.setData(Uri.parse("file:///android_asset/about.html"));
+                startActivity(intent);
+                return true;
+            default:
+                break;
         }
+
         return super.onOptionsItemSelected(item);
     }
+
 }

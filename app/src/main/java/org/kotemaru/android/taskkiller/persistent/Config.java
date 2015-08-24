@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public class Config  {
+public class Config {
     public final static String K_SHOW_SYSTEM_PROC = "showSystemProcess";
     public final static String K_SORT_CONDITION = "sortCondition";
 
@@ -30,6 +30,7 @@ public class Config  {
             return SortCondition.CPU_LATEST;
         }
     }
+
     public static boolean isProcessMonitoring() {
         return sSharedPrefs.getBoolean("monitoring", true);
     }
@@ -38,15 +39,16 @@ public class Config  {
         String val = sSharedPrefs.getString("monitorInterval", "5");
         try {
             return Integer.valueOf(val);
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return 5;
         }
     }
+
     public static int getMonitorLoggingCount() {
         String val = sSharedPrefs.getString("monitorLoggingCount", "20");
         try {
             return Integer.valueOf(val);
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return 5;
         }
     }
