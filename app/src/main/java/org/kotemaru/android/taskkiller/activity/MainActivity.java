@@ -309,6 +309,7 @@ public class MainActivity extends Activity {
                 startActivity(new Intent(this, PrefActivity.class));
                 return true;
             case R.id.action_refresh:
+                mApplication.getProcessMonitor().reload();
                 refresh();
                 return true;
             case R.id.action_help:

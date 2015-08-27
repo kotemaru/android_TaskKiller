@@ -29,10 +29,16 @@ public class ProcessMonitor {
 
     public ProcessMonitor(Context context) {
         mPackageManager = context.getPackageManager();
+        reload();
+    }
+
+    public ProcessMonitor reload() {
+        mPackageMap.clear();
         List<ApplicationInfo> all = mPackageManager.getInstalledApplications(PackageManager.GET_META_DATA);
         for (ApplicationInfo appInfo : all) {
-            getPackageInfo(appInfo.packageName);
+            if (appInfo.enabled) getPackageInfo(appInfo.packageName);
         }
+        return this;
     }
 
     public void getProcessInfoList(List<ItemInfo> result, boolean isShowSystem) {
@@ -142,9 +148,9 @@ public class ProcessMonitor {
     private String getProcessName(String pid) {
         int len = readFile("/proc/" + pid + "/stat", mBuffer);
         if (len <= 0) return "()";
-        int off = skip(mBytes, 0, len);
-        int end = skip(mBytes, off, len);
-        String name = new String(mBytes, off, end);
+        int start = skip(mBytes, 0, len);
+        int end = skip(mBytes, start, len);
+        String name = new String(mBytes, start, end - start);
         return name.trim();
     }
 

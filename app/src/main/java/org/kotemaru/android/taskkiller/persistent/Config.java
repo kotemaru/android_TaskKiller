@@ -23,20 +23,20 @@ public class Config {
     }
 
     public static SortCondition getSortCondition() {
-        String val = sSharedPrefs.getString(K_SORT_CONDITION, SortCondition.CPU_LATEST.name());
+        String val = sSharedPrefs.getString(K_SORT_CONDITION, SortCondition.CPU_AVERAGE.name());
         try {
             return SortCondition.valueOf(val);
         } catch (IllegalArgumentException e) {
-            return SortCondition.CPU_LATEST;
+            return SortCondition.CPU_AVERAGE;
         }
     }
 
     public static boolean isProcessMonitoring() {
-        return sSharedPrefs.getBoolean("monitoring", true);
+        return sSharedPrefs.getBoolean("monitoring", false);
     }
 
     public static int getMonitorInterval() {
-        String val = sSharedPrefs.getString("monitorInterval", "5");
+        String val = sSharedPrefs.getString("monitorInterval", "10");
         try {
             return Integer.valueOf(val);
         } catch (NumberFormatException e) {

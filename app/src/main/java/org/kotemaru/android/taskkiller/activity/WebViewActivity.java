@@ -48,7 +48,6 @@ public class WebViewActivity extends Activity {
         String uri = intent.getDataString();
         if (uri == null) uri = "file:///android_asset/about.html";
         String lang = Locale.getDefault().getLanguage();
-        Log.d(TAG, "lang=" + lang + ":" + Locale.JAPANESE.getLanguage());
         if (Locale.JAPANESE.getLanguage().equals(lang)
                 && uri.indexOf("/help.html") > 0) {
             uri = uri.replaceFirst(".html$", "-ja.html");

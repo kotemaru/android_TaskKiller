@@ -1,4 +1,7 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 apply plugin: 'com.android.application'
+
 
 android {
     compileSdkVersion 21
@@ -10,6 +13,7 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0.0"
+
     }
     buildTypes {
         release {
@@ -22,3 +26,34 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
+
+def getCommitId() {
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'rev-list', 'master', '--max-count', '1'
+            standardOutput = stdout
+        }
+        return stdout.toString().trim();
+    }
+    catch (Exception e) {
+        println e.toString();
+        return "";
+    }
+}
+
+task makeAboutHtml {
+    copy {
+        from 'src/main/assets/about-template.html'
+        into 'src/main/assets/'
+        rename(/-template.html$/, ".html");
+        filter(ReplaceTokens, tokens: [
+                VERSION  : android.defaultConfig.versionName,
+                COMMIT_ID: getCommitId()
+        ])
+    }
+}
+android.applicationVariants.all { variant ->
+    variant.mergeAssets.dependsOn('makeAboutHtml')
+}
+
