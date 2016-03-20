@@ -148,6 +148,7 @@ public class MainActivity extends Activity {
         if (mListMode == ListMode.PACKAGE) {
             mApplication.getProcessMonitor().getPackageInfoList(mItemInfoList);
         } else {
+            mApplication.getProcessMonitor().refresh(this, false);
             mApplication.getProcessMonitor().getProcessInfoList(mItemInfoList, Config.isShowSystemProcess());
         }
 
@@ -309,7 +310,7 @@ public class MainActivity extends Activity {
                 startActivity(new Intent(this, PrefActivity.class));
                 return true;
             case R.id.action_refresh:
-                mApplication.getProcessMonitor().reload();
+                mApplication.getProcessMonitor().reload(this);
                 refresh();
                 return true;
             case R.id.action_help:

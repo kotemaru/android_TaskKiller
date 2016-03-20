@@ -76,7 +76,7 @@ public class MonitorReceiver extends BroadcastReceiver {
         Log.d(TAG, "onReceive:" + action);
         if (ACTION_MONITOR.equals(action)) {
             final MyApplication app = (MyApplication) context.getApplicationContext();
-            app.getProcessMonitor().refresh(context);
+            app.getProcessMonitor().refresh(context, true);
         }
     }
 }

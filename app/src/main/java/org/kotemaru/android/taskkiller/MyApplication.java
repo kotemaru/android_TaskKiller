@@ -32,7 +32,7 @@ public class MyApplication extends Application {
 
         ScreenOffReceiver.create(this);
         mProcessMonitor = new ProcessMonitor(this);
-        mProcessMonitor.refresh(this);
+        mProcessMonitor.refresh(this, true);
     }
 
     public ProcessMonitor getProcessMonitor() {

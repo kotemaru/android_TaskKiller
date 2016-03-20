@@ -29,15 +29,16 @@ public class ProcessMonitor {
 
     public ProcessMonitor(Context context) {
         mPackageManager = context.getPackageManager();
-        reload();
+        reload(context);
     }
 
-    public ProcessMonitor reload() {
+    public ProcessMonitor reload(Context context) {
         mPackageMap.clear();
         List<ApplicationInfo> all = mPackageManager.getInstalledApplications(PackageManager.GET_META_DATA);
         for (ApplicationInfo appInfo : all) {
             if (appInfo.enabled) getPackageInfo(appInfo.packageName);
         }
+        refresh(context, false);
         return this;
     }
 
@@ -64,13 +65,15 @@ public class ProcessMonitor {
         }
     }
 
-    public void refresh(Context context) {
+    public void refresh(Context context, boolean isMonitoring) {
         long totalCpuTime = getTotalCpuTime();
         long subTotalCpuTime = totalCpuTime - lastTotalCpuTime;
         lastTotalCpuTime = totalCpuTime;
 
-        for (PackageInfo pkgInfo : mPackageMap.values()) {
-            pkgInfo.cpuRateLog.shift();
+        if (isMonitoring) {
+            for (PackageInfo pkgInfo : mPackageMap.values()) {
+                pkgInfo.cpuRateLog.shift();
+            }
         }
 
         String files[] = PROC_DIR.list();
@@ -78,12 +81,14 @@ public class ProcessMonitor {
             char ch = pid.charAt(0);
             if ('0' > ch || ch > '9') continue;
             //String packageName = getCommandLine(pid);
-            long cpuTime = getCpuTime(pid);
             ProcessInfo info = getProcessInfo(pid);
-            info.cpuRateLog.shift();
-            float cpuRate = info.cpuRateLog.pushCpuTime(cpuTime, subTotalCpuTime);
-            if (info.packageInfo != null) {
-                info.packageInfo.cpuRateLog.margeCpuRate(cpuRate);
+            if (isMonitoring) {
+                long cpuTime = getCpuTime(pid);
+                info.cpuRateLog.shift();
+                float cpuRate = info.cpuRateLog.pushCpuTime(cpuTime, subTotalCpuTime);
+                if (info.packageInfo != null) {
+                    info.packageInfo.cpuRateLog.margeCpuRate(cpuRate);
+                }
             }
             info.isAlive = true;
         }
