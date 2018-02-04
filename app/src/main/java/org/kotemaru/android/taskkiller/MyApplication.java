@@ -10,12 +10,14 @@ import org.kotemaru.android.taskkiller.activity.MainActivity;
 import org.kotemaru.android.taskkiller.monitor.ProcessMonitor;
 import org.kotemaru.android.taskkiller.persistent.Config;
 import org.kotemaru.android.taskkiller.persistent.Database;
+import org.kotemaru.android.taskkiller.receiver.AlarmReceiver;
 import org.kotemaru.android.taskkiller.receiver.ScreenOffReceiver;
 
 import java.util.Map;
 
 public class MyApplication extends Application {
     private static final String TAG = "MyApplication";
+    private static MyApplication sInstance;
 
     private ProcessMonitor mProcessMonitor;
     private MainActivity mMainActivity;
@@ -23,9 +25,16 @@ public class MyApplication extends Application {
     private Database mDatabase;
     private Map<String, Integer> mDbMap;
 
+
+    public static MyApplication getInstance() {
+        return sInstance;
+    }
+
+
     @Override
     public void onCreate() {
         super.onCreate();
+        sInstance = this ;
         Config.init(this);
         mDatabase = new Database(this);
         mDbMap = mDatabase.getMap();
@@ -33,6 +42,7 @@ public class MyApplication extends Application {
         ScreenOffReceiver.create(this);
         mProcessMonitor = new ProcessMonitor(this);
         mProcessMonitor.refresh(this, true);
+        AlarmReceiver.applyKillRepeat();
     }
 
     public ProcessMonitor getProcessMonitor() {

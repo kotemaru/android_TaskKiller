@@ -34,6 +34,7 @@ import org.kotemaru.android.taskkiller.R;
 import org.kotemaru.android.taskkiller.monitor.ProcessMonitor;
 import org.kotemaru.android.taskkiller.monitor.ItemInfo;
 import org.kotemaru.android.taskkiller.persistent.Config;
+import org.kotemaru.android.taskkiller.receiver.ScreenOffReceiver;
 import org.kotemaru.android.taskkiller.service.InstanceKeepService;
 import org.kotemaru.android.taskkiller.widget.GraphView;
 
@@ -312,6 +313,16 @@ public class MainActivity extends Activity {
             case R.id.action_refresh:
                 mApplication.getProcessMonitor().reload(this);
                 refresh();
+                return true;
+            case R.id.action_kill:
+                ScreenOffReceiver.killProcesses();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mApplication.getProcessMonitor().reload(mApplication);
+                        refresh();
+                    }
+                });
                 return true;
             case R.id.action_help:
                 intent = new Intent(this, WebViewActivity.class);

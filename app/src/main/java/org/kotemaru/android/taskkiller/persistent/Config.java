@@ -4,26 +4,32 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import org.kotemaru.android.taskkiller.MyApplication;
+
 public class Config {
     public final static String K_SHOW_SYSTEM_PROC = "showSystemProcess";
     public final static String K_SORT_CONDITION = "sortCondition";
+    public final static String K_KILL_REPEAT = "killRepeat";
 
     public enum SortCondition {
         CPU_LATEST, CPU_AVERAGE, NAME;
     }
 
-    private static SharedPreferences sSharedPrefs;
+    private static SharedPreferences sharedPrefs;
 
     public static void init(Context context) {
-        sSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public static boolean isShowSystemProcess() {
-        return sSharedPrefs.getBoolean(K_SHOW_SYSTEM_PROC, true);
+        SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(MyApplication.getInstance());
+        return sharedPrefs.getBoolean(K_SHOW_SYSTEM_PROC, true);
     }
 
     public static SortCondition getSortCondition() {
-        String val = sSharedPrefs.getString(K_SORT_CONDITION, SortCondition.CPU_AVERAGE.name());
+        SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(MyApplication.getInstance());
+        String val = sharedPrefs.getString(K_SORT_CONDITION, SortCondition.CPU_AVERAGE.name());
         try {
             return SortCondition.valueOf(val);
         } catch (IllegalArgumentException e) {
@@ -32,11 +38,13 @@ public class Config {
     }
 
     public static boolean isProcessMonitoring() {
-        return sSharedPrefs.getBoolean("monitoring", false);
+        SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(MyApplication.getInstance());
+        return sharedPrefs.getBoolean("monitoring", false);
     }
 
     public static int getMonitorInterval() {
-        String val = sSharedPrefs.getString("monitorInterval", "10");
+        SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(MyApplication.getInstance());
+        String val = sharedPrefs.getString("monitorInterval", "10");
         try {
             return Integer.valueOf(val);
         } catch (NumberFormatException e) {
@@ -45,7 +53,8 @@ public class Config {
     }
 
     public static int getMonitorLoggingCount() {
-        String val = sSharedPrefs.getString("monitorLoggingCount", "20");
+        SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(MyApplication.getInstance());
+        String val = sharedPrefs.getString("monitorLoggingCount", "20");
         try {
             return Integer.valueOf(val);
         } catch (NumberFormatException e) {
@@ -53,5 +62,9 @@ public class Config {
         }
     }
 
+    public static boolean isKillRepeat() {
+        SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(MyApplication.getInstance());
+        return sharedPrefs.getBoolean(K_KILL_REPEAT, false);
+    }
 
 }

@@ -15,6 +15,7 @@ import android.util.Log;
 import org.kotemaru.android.taskkiller.persistent.Config;
 import org.kotemaru.android.taskkiller.MyApplication;
 import org.kotemaru.android.taskkiller.R;
+import org.kotemaru.android.taskkiller.receiver.AlarmReceiver;
 import org.kotemaru.android.taskkiller.receiver.MonitorReceiver;
 
 public class PrefActivity extends Activity {
@@ -54,6 +55,7 @@ public class PrefActivity extends Activity {
             mBackupMonitorLoggingCount = Config.getMonitorLoggingCount();
             mBackupMonitorInterval = Config.getMonitorInterval();
             getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+            AlarmReceiver.applyKillRepeat();
         }
 
         @Override

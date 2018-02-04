@@ -4,11 +4,15 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.app.Notification;
 import android.content.Intent;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 import org.kotemaru.android.taskkiller.persistent.Config;
 import org.kotemaru.android.taskkiller.R;
 import org.kotemaru.android.taskkiller.activity.MainActivity;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class InstanceKeepService extends IntentService {
     private static final String TAG = InstanceKeepService.class.getSimpleName();
@@ -23,10 +27,11 @@ public class InstanceKeepService extends IntentService {
         super.onCreate();
     }
 
-    public void startForeground() {
+    public void startForeground(String message) {
         Notification.Builder builder = new Notification.Builder(getApplicationContext());
         builder.setSmallIcon(R.drawable.icon_notify);
         builder.setContentTitle(getString(R.string.app_name));
+        builder.setContentInfo(message);
         builder.setWhen(System.currentTimeMillis());
         builder.setContentText(Config.isProcessMonitoring()
                 ? "Process monitored (interval=" + Config.getMonitorInterval() + "min)"
@@ -56,7 +61,7 @@ public class InstanceKeepService extends IntentService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         String action = intent == null ? null : intent.getAction();
         Log.d(TAG, "InstanceKeepService.onStartCommand:" + action);
-        startForeground();
+        startForeground("");
         return START_STICKY;
     }
 }

@@ -6,8 +6,15 @@
         android:id="@+id/action_refresh"
         android:icon="@drawable/refresh"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:title="@string/action_refresh"/>
+
+    <item
+        android:id="@+id/action_kill"
+        android:icon="@drawable/delete"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="@string/action_kill"/>
 
     <item
         android:id="@+id/action_settings"

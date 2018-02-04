@@ -34,4 +34,10 @@
         android:key="monitorLoggingCount"
         android:title="Monitor logging count"/>
 
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="killRepeat"
+        android:selectable="true"
+        android:summaryOn="The process is killed every 15 minutes."
+        android:title="Repeatedly kill process"/>
 </PreferenceScreen>

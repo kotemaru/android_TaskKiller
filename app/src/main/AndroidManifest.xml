@@ -9,6 +9,7 @@
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".MyApplication"
@@ -49,7 +50,11 @@
                 <action android:name="ACTION_MONITOR"/>
             </intent-filter>
         </receiver>
-
+        <receiver android:name=".receiver.AlarmReceiver" >
+            <intent-filter>
+                <action android:name="ACTION_KILL_PROC"/>
+            </intent-filter>
+        </receiver>
         <receiver android:name=".receiver.BootCompletedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>

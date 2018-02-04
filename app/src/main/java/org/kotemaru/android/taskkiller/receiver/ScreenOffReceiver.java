@@ -2,8 +2,6 @@ package org.kotemaru.android.taskkiller.receiver;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +10,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import org.kotemaru.android.taskkiller.persistent.Config;
 import org.kotemaru.android.taskkiller.service.InstanceKeepService;
 import org.kotemaru.android.taskkiller.MyApplication;
 
@@ -41,7 +38,6 @@ public class ScreenOffReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
         String action = intent.getAction();
         Log.d(TAG, "onReceive:" + action);
-        final MyApplication app = (MyApplication) context.getApplicationContext();
 
         if (Intent.ACTION_SCREEN_OFF.equals(action)) {
             Log.d(TAG, "screen off");
@@ -49,21 +45,34 @@ public class ScreenOffReceiver extends BroadcastReceiver {
             startMain.addCategory(Intent.CATEGORY_HOME);
             startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(startMain);
+            postNotification(context);
 
             mUiHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    ActivityManager am = (ActivityManager) context.getSystemService(Activity.ACTIVITY_SERVICE);
-                    Map<String, Integer> map = app.getDbMap();
-                    for (Map.Entry<String, Integer> item : map.entrySet()) {
-                        String pkgName = item.getKey();
-                        if (item.getValue() == 1 && pkgName != null) {
-                            Log.i(TAG, "kill on sleep:" + pkgName);
-                            am.killBackgroundProcesses(pkgName);
-                        }
-                    }
+                    killProcesses();
                 }
             }, 1000);
         }
     }
+
+    private void postNotification(final Context context) {
+        Intent intent = new Intent(context, InstanceKeepService.class);
+        context.startService(intent);
+    }
+
+
+    public static void killProcesses() {
+        final MyApplication app = MyApplication.getInstance();
+        ActivityManager am = (ActivityManager) app.getSystemService(Activity.ACTIVITY_SERVICE);
+        Map<String, Integer> map = app.getDbMap();
+        for (Map.Entry<String, Integer> item : map.entrySet()) {
+            String pkgName = item.getKey();
+            if (item.getValue() == 1 && pkgName != null) {
+                Log.i(TAG, "kill on sleep:" + pkgName);
+                am.killBackgroundProcesses(pkgName);
+            }
+        }
+    }
+
 }
